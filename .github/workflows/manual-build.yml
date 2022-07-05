@@ -1,0 +1,48 @@
+name: manual-build
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Image name to build (e.g. {{image}}/ffmpeg:5.0.0)'
+        required: true
+        default: ''
+      version:
+        description: 'Image version (sandreas/ffmpeg:{{version}} - e.g. 5.0.0)'
+        required: true
+        default: ''
+      platforms:
+        description: 'Platforms to build for (e.g. linux/amd64,linux/arm)'
+        required: true
+        default: 'linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7'
+      tags:
+        description: 'Tags'
+        required: true
+jobs:
+  docker:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: ${{ github.event.inputs.image }}/${{ github.event.inputs.version }}/Dockerfile
+          platforms: ${{ github.event.inputs.platform }}
+          #platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
+          push: true
+          tags: sandreas/${{ github.event.inputs.image }}:${{ github.event.inputs.version }}
