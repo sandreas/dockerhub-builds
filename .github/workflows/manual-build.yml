@@ -13,7 +13,7 @@ on:
       platforms:
         description: 'Platforms to build for (e.g. linux/amd64,linux/arm)'
         required: true
-        default: 'linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7'
+        default: 'linux/386,linux/ppc64le,linux/s390x,linux/arm/v6,linux/arm/v7,linux/arm64,linux/amd64'
       tags:
         description: 'Tags'
         required: false
@@ -42,6 +42,6 @@ jobs:
         with:
           file: ${{ github.event.inputs.image }}/${{ github.event.inputs.version }}/Dockerfile
           platforms: ${{ github.event.inputs.platform }}
-          #platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
+          #platforms: linux/386,linux/ppc64le,linux/s390x,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: sandreas/${{ github.event.inputs.image }}:${{ github.event.inputs.version }}
