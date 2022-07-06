@@ -35,6 +35,7 @@ COPY --from=fdkaac /usr/local/bin/fdkaac /usr/local/bin/
 ARG M4B_TOOL_DOWNLOAD_LINK="https://github.com/sandreas/m4b-tool/releases/latest/download/m4b-tool.tar.gz"
 
 # workaround to copy a local m4b-tool.phar IF it exists
+RUN echo "---- INSTALL M4B-TOOL ----" && touch ./Dockerfile
 ADD ./Dockerfile ./dist/m4b-tool.phar* /tmp/
 RUN echo "---- INSTALL M4B-TOOL ----" \
     && if [ ! -f /tmp/m4b-tool.phar ]; then \
