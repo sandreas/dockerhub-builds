@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       image:
-        description: 'Image name to build (e.g. {{image}}/ffmpeg:5.0.0)'
+        description: 'Image name to build (e.g. sandreas/{{image}}:5.0.0)'
         required: true
         default: ''
       version:
