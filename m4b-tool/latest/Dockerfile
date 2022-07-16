@@ -50,4 +50,4 @@ RUN echo "---- INSTALL M4B-TOOL ----" \
 
 WORKDIR ${WORKDIR}
 CMD ["list"]
-ENTRYPOINT ["m4b-tool"]
+ENTRYPOINT ["m4b-tool-pre"]
