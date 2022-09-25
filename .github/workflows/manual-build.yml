@@ -39,7 +39,8 @@ jobs:
           
           if [ "${{ github.event.inputs.tags }}" != "" ]; then
             for i in "${{ github.event.inputs.tags }}"; do
-              docker_tags="$docker_tags sandreas/${{ github.event.inputs.image }}:$i"
+              docker_tags="$docker_tags
+          sandreas/${{ github.event.inputs.image }}:$i"
             done
           fi
           
@@ -58,4 +59,5 @@ jobs:
           platforms: ${{ github.event.inputs.platform }}
           #platforms: linux/386,linux/ppc64le,linux/s390x,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
-          tags: ${{ steps.composeTags.outputs.docker_tags }}
+          tags: |
+            ${{ steps.composeTags.outputs.docker_tags }}
