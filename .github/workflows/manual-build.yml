@@ -15,7 +15,7 @@ on:
         required: true
         default: 'linux/386,linux/ppc64le,linux/s390x,linux/arm/v6,linux/arm/v7,linux/arm64,linux/amd64'
       tags:
-        description: 'Extra-Tags (sandreas/{{image}}:{{extraTag}}'
+        description: 'Tag override (default: sandreas/{{image}}:{{tag}}'
         required: false
 jobs:
   docker:
@@ -38,10 +38,7 @@ jobs:
           docker_tags="sandreas/${{ github.event.inputs.image }}:${{ github.event.inputs.version }}"
           
           if [ "${{ github.event.inputs.tags }}" != "" ]; then
-            for i in "${{ github.event.inputs.tags }}"; do
-              docker_tags="$docker_tags
-          sandreas/${{ github.event.inputs.image }}:$i"
-            done
+            docker_tags="sandreas/${{ github.event.inputs.image }}:${{ github.event.inputs.tags }}"
           fi
           
           echo "::set-output name=docker_tags::$docker_tags"
