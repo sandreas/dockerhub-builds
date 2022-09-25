@@ -32,6 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: ComposeTags
+        id: composeTags
         shell: bash
         run: |
           docker_tags="sandreas/${{ github.event.inputs.image }}:${{ github.event.inputs.version }}"
@@ -57,4 +58,4 @@ jobs:
           platforms: ${{ github.event.inputs.platform }}
           #platforms: linux/386,linux/ppc64le,linux/s390x,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
-          tags: ${{ steps.build.outputs.docker_tags }}
+          tags: ${{ steps.composeTags.outputs.docker_tags }}
