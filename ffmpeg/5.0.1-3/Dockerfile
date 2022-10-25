@@ -262,15 +262,15 @@ RUN \
 # bump: libvpx after ./hashupdate Dockerfile VPX $LATEST
 # bump: libvpx link "CHANGELOG" https://github.com/webmproject/libvpx/blob/master/CHANGELOG
 # bump: libvpx link "Source diff $CURRENT..$LATEST" https://github.com/webmproject/libvpx/compare/v$CURRENT..v$LATEST
-ARG VPX_VERSION=1.12.0
-ARG VPX_URL="https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz"
-ARG VPX_SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
-RUN \
-  wget $WGET_OPTS -O libvpx.tar.gz "$VPX_URL" && \
-  echo "$VPX_SHA256  libvpx.tar.gz" | sha256sum --status -c - && \
-  tar xf libvpx.tar.gz && \
-  cd libvpx-* && ./configure --enable-static --enable-vp9-highbitdepth --disable-shared --disable-unit-tests --disable-examples && \
-  make -j$(nproc) install
+#ARG VPX_VERSION=1.12.0
+#ARG VPX_URL="https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz"
+#ARG VPX_SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
+#RUN \
+#  wget $WGET_OPTS -O libvpx.tar.gz "$VPX_URL" && \
+#  echo "$VPX_SHA256  libvpx.tar.gz" | sha256sum --status -c - && \
+#  tar xf libvpx.tar.gz && \
+#  cd libvpx-* && ./configure --enable-static --enable-vp9-highbitdepth --disable-shared --disable-unit-tests --disable-examples && \
+#  make -j$(nproc) install
 
 
 # bump: libwebp /LIBWEBP_VERSION=([\d.]+)/ https://github.com/webmproject/libwebp.git|*
@@ -333,7 +333,6 @@ RUN \
   --enable-libtheora \
   --enable-libtwolame \
   --enable-libvorbis \
-  --enable-libvpx \
   --enable-libwebp \
   --enable-libxml2 \
   --enable-openssl \
@@ -371,7 +370,6 @@ RUN \
   libtheora: env.THEORA_VERSION, \
   libtwolame: env.TWOLAME_VERSION, \
   libvorbis: env.VORBIS_VERSION, \
-  libvpx: env.VPX_VERSION, \
   libwebp: env.LIBWEBP_VERSION, \
   libxml2: env.LIBXML2_VERSION, \
   openssl: env.OPENSSL_VERSION, \
