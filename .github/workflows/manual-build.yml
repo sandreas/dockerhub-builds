@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           file: ${{ github.event.inputs.image }}/${{ github.event.inputs.version }}/Dockerfile
-          platforms: ${{ github.event.inputs.platform }}
+          platforms: ${{ github.event.inputs.platforms }}
           #platforms: linux/386,linux/ppc64le,linux/s390x,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
