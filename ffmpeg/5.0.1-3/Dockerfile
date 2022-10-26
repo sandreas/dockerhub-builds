@@ -12,7 +12,7 @@ FROM sandreas/ffmpeg:linux-arm64-5.0.1-3 as ffmpeg-arm64
 FROM sandreas/ffmpeg:linux-amd64-5.0.1-3 as ffmpeg-x64
 
 
-FROM alpine:3.14
+FROM alpine:3.16.0
 
 RUN mkdir -p /tmp/ffmpeg_{armv6,armv7,arm64,amd64}
 
@@ -29,7 +29,7 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
     COPY_SUFFIX="arm64"; \
   elif [ "$APK_ARCH" = "armv7" ]; then \
     COPY_SUFFIX="armv7"; \
-  elif [[ "$APK_ARCH" = "armhf" ] || [ "$APK_ARCH" = "armel" ]; then \
+  elif [[ "$APK_ARCH" = "" ] || "$APK_ARCH" = "armhf" ] || [ "$APK_ARCH" = "armel" ]; then \
     COPY_SUFFIX="armv6"; \
   fi && \
     cp /tmp/ffmpeg_$COPY_SUFFIX/ff* /usr/local/bin/ && \
