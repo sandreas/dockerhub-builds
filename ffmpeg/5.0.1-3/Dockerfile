@@ -29,7 +29,7 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
     COPY_SUFFIX="arm64"; \
   elif [ "$APK_ARCH" = "armv7" ]; then \
     COPY_SUFFIX="armv7"; \
-  elif [[ "$APK_ARCH" = "" ] || "$APK_ARCH" = "armhf" ] || [ "$APK_ARCH" = "armel" ]; then \
+  else \
     COPY_SUFFIX="armv6"; \
   fi && \
     cp /tmp/ffmpeg_$COPY_SUFFIX/ff* /usr/local/bin/ && \
