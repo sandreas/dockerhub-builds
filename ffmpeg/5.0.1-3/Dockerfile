@@ -45,3 +45,5 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
     rm "/tmp/ffprobe_armv7" && \
     rm "/tmp/ffprobe_arm64" && \
     rm "/tmp/ffprobe_amd64"
+
+ENTRYPOINT ["/usr/local/bin/ffmpeg"]
