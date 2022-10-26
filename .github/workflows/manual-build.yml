@@ -11,9 +11,9 @@ on:
         required: true
         default: ''
       platforms:
-        description: 'Platforms to build for (e.g. linux/amd64,linux/arm)'
+        description: 'Platforms to build for (e.g. linux/386,linux/ppc64le,linux/s390x)'
         required: true
-        default: 'linux/386,linux/ppc64le,linux/s390x,linux/arm/v6,linux/arm/v7,linux/arm64,linux/amd64'
+        default: 'linux/arm/v6,linux/arm/v7,linux/arm64,linux/amd64'
       tags:
         description: 'Tag override (default: sandreas/{{image}}:{{tag}}'
         required: false
