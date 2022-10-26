@@ -9,17 +9,20 @@
 FROM sandreas/ffmpeg:linux-armv6-5.0.1-3 as ffmpeg-armv6
 FROM sandreas/ffmpeg:linux-armv7-5.0.1-3 as ffmpeg-armv7
 FROM sandreas/ffmpeg:linux-arm64-5.0.1-3 as ffmpeg-arm64
-FROM sandreas/ffmpeg:linux-amd64-5.0.1-3 as ffmpeg-amd64
+FROM sandreas/ffmpeg:linux-amd64-5.0.1-3 as ffmpeg-x64
+
+
+FROM alpine:3.14
 
 COPY --from=ffmpeg-armv6 /usr/local/bin/ffmpeg /tmp/ffmpeg_armv6
 COPY --from=ffmpeg-armv7 /usr/local/bin/ffmpeg /tmp/ffmpeg_armv7
 COPY --from=ffmpeg-arm64 /usr/local/bin/ffmpeg /tmp/ffmpeg_arm64
-COPY --from=ffmpeg-amd64 /usr/local/bin/ffmpeg /tmp/ffmpeg_amd64
+COPY --from=ffmpeg-x64 /usr/local/bin/ffmpeg /tmp/ffmpeg_amd64
 
 COPY --from=ffmpeg-armv6 /usr/local/bin/ffprobe /tmp/ffprobe_armv6
 COPY --from=ffmpeg-armv7 /usr/local/bin/ffprobe /tmp/ffprobe_armv7
 COPY --from=ffmpeg-arm64 /usr/local/bin/ffprobe /tmp/ffprobe_arm64
-COPY --from=ffmpeg-amd64 /usr/local/bin/ffprobe /tmp/ffprobe_amd64
+COPY --from=ffmpeg-x64 /usr/local/bin/ffprobe /tmp/ffprobe_amd64
 
 RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
   APK_ARCH=$(apk --print-arch) && \
@@ -34,4 +37,11 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
   fi && \
     cp "/tmp/ffmpeg_$COPY_SUFFIX" /usr/local/bin/ffmpeg && \
     cp "/tmp/ffprobe_$COPY_SUFFIX" /usr/local/bin/ffprobe && \
-    rm "/tmp/ff*"
+    rm "/tmp/ffmpeg_armv6" && \
+    rm "/tmp/ffmpeg_armv7" && \
+    rm "/tmp/ffmpeg_arm64" && \
+    rm "/tmp/ffmpeg_amd64" && \
+    rm "/tmp/ffprobe_armv6" && \
+    rm "/tmp/ffprobe_armv7" && \
+    rm "/tmp/ffprobe_arm64" && \
+    rm "/tmp/ffprobe_amd64"
