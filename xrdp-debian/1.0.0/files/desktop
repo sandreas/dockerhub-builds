@@ -9,7 +9,6 @@ DEBIAN_FRONTEND=noninteractive apt-get update
 echo "Installing Cinnamon ..."
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends task-cinnamon-desktop
 echo "cinnamon" > /etc/skel/.xsession
-echo "[OK]";;
 
 # Clean APT cache
 apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
