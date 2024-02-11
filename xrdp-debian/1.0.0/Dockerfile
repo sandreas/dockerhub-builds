@@ -6,7 +6,11 @@ FROM debian:bookworm-slim
 
 LABEL maintainer="Jérémy WALTHER <jeremy@ferox.yt>"
 
+COPY 'files/mozilla.list' '/etc/apt/sources.list.d/mozilla.list'
+COPY 'files/mozilla' '/etc/apt/preferences.d/mozilla'
+
 # Install required packages to run
+
 RUN     DEBIAN_FRONTEND=noninteractive apt-get update \
     &&  DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends \
             ca-certificates \
@@ -20,7 +24,15 @@ RUN     DEBIAN_FRONTEND=noninteractive apt-get update \
             vim \
             xrdp \
             wget \
+            default-jre \
+            kitty \
+    && install -d -m 0755 /etc/apt/keyrings \
+    && wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends \
+          firefox \
     &&  apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
+
 
 # Set default environment variables
 ENV FRX_APTGET_DISTUPGRADE=""
@@ -36,11 +48,16 @@ ENV FRX_XRDP_USER_GID=1000
 ENV FRX_XRDP_USER_UID=1000
 ENV FRX_XRDP_USER_COPY_SA=0
 ENV TZ=Etc/UTC
+
 # Copy assets
-COPY files/log /usr/local/bin/frx-log
-COPY files/start /usr/local/sbin/frx-start
-COPY files/supervisord.conf /etc/supervisor/supervisord.conf
-COPY files/xrdp.ini /etc/xrdp/xrdp.ini
+COPY files/log                  /usr/local/bin/frx-log
+COPY files/start                /usr/local/sbin/frx-start
+COPY files/supervisord.conf     /etc/supervisor/supervisord.conf
+COPY files/xrdp.ini             /etc/xrdp/xrdp.ini
+COPY files/desktop /usr/local/sbin/frx-desktop
+# Copy source files
+COPY Dockerfile /frx/
+
 
 # Configure installed packages
 RUN     echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ALL \
@@ -59,36 +76,10 @@ RUN     echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ALL \
 ARG DOCKER_TAG
 ARG SOURCE_BRANCH
 ARG SOURCE_COMMIT
-COPY files/desktop /usr/local/sbin/frx-desktop
 RUN     echo "[frxyt/xrdp:${DOCKER_TAG}] <https://github.com/frxyt/docker-xrdp>" > /frx/version \
     &&  echo "[version: ${SOURCE_BRANCH}@${SOURCE_COMMIT}]" >> /frx/version \
     &&  /usr/local/sbin/frx-desktop ${DOCKER_TAG}
 
-# Copy source files
-COPY Dockerfile /frx/
-
-
-RUN install -d -m 0755 /etc/apt/keyrings
-RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
-
-# RUN echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
-# RUN echo $' \n\
-# Package: * \n\
-# Pin: origin packages.mozilla.org \n\
-# Pin-Priority: 1000 \n\
-# ' | tee /etc/apt/preferences.d/mozilla
-
-
-COPY files/mozilla.list /etc/apt/sources.list.d/mozilla.list
-COPY files/mozilla /etc/apt/preferences.d/mozilla
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends \
-    firefox \
-    default-jre \
-    kitty
-
-#EXPOSE 22
-#EXPOSE 3389
 
 VOLUME [ "/home" ]
 WORKDIR /home
