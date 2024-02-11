@@ -36,12 +36,11 @@ ENV FRX_XRDP_USER_GID=1000
 ENV FRX_XRDP_USER_UID=1000
 ENV FRX_XRDP_USER_COPY_SA=0
 ENV TZ=Etc/UTC
-
 # Copy assets
-COPY files/log                  /usr/local/bin/frx-log
-COPY files/start                /usr/local/sbin/frx-start
-COPY files/supervisord.conf     /etc/supervisor/supervisord.conf
-COPY files/xrdp.ini             /etc/xrdp/xrdp.ini
+COPY /github/workspace/xrdp-debian/1.0.0/files/log /usr/local/bin/frx-log
+COPY /github/workspace/xrdp-debian/1.0.0/files/start /usr/local/sbin/frx-start
+COPY /github/workspace/xrdp-debian/1.0.0/files/supervisord.conf /etc/supervisor/supervisord.conf
+COPY /github/workspace/xrdp-debian/1.0.0/files/xrdp.ini /etc/xrdp/xrdp.ini
 
 # Configure installed packages
 RUN     echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ALL \
@@ -80,8 +79,8 @@ RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | tee /etc
 # ' | tee /etc/apt/preferences.d/mozilla
 
 
-COPY 'files/mozilla.list' '/etc/apt/sources.list.d/mozilla.list'
-COPY 'files/mozilla' '/etc/apt/preferences.d/mozilla'
+COPY /github/workspace/xrdp-debian/1.0.0/files/mozilla.list /etc/apt/sources.list.d/mozilla.list
+COPY /github/workspace/xrdp-debian/1.0.0/files/mozilla /etc/apt/preferences.d/mozilla
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends \
     firefox \
