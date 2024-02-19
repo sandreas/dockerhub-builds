@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-xrdp> for details.
+
+# Update APT cache
+DEBIAN_FRONTEND=noninteractive apt-get update
+echo "Installing Cinnamon ..."
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --fix-missing --no-install-recommends task-cinnamon-desktop
+echo "cinnamon" > /etc/skel/.xsession
+
+# Clean APT cache
+apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
