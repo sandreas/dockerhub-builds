@@ -18,6 +18,7 @@ RUN     DEBIAN_FRONTEND=noninteractive apt-get update \
             ca-certificates \
             curl \
             dbus-x11 \
+            libdbus-glib-1-2 \
             gnupg \
             openssh-server \
             sudo \
