@@ -13,13 +13,16 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
   libstdc++ \
   # m4b-tool: php cli, required extensions and php settings
   php83-cli \
+  php83-curl \
   php83-dom \
   php83-xml \
   php83-mbstring \
+  php83-openssl \
   php83-phar \
+  php83-simplexml \
   php83-tokenizer \
   php83-xmlwriter \
-  php83-openssl \
+  php83-zip \
   && echo "date.timezone = UTC" >> /etc/php83/php.ini \
   && ln -s /usr/bin/php83 /bin/php
 
