@@ -2,7 +2,7 @@ FROM sandreas/ffmpeg:5.0.1-3 as ffmpeg
 FROM sandreas/tone:v0.1.7 as tone
 FROM sandreas/mp4v2:2.1.1 as mp4v2
 FROM sandreas/fdkaac:2.0.1 as fdkaac
-FROM alpine:3.14
+FROM alpine:3.20.3
 ENV WORKDIR /mnt/
 ENV M4BTOOL_TMP_DIR /tmp/m4b-tool/
 
@@ -12,17 +12,16 @@ RUN echo "---- INSTALL RUNTIME PACKAGES ----" && \
   # mp4v2: required libraries
   libstdc++ \
   # m4b-tool: php cli, required extensions and php settings
-  php8-cli \
-  php8-dom \
-  php8-json \
-  php8-xml \
-  php8-mbstring \
-  php8-phar \
-  php8-tokenizer \
-  php8-xmlwriter \
-  php8-openssl \
-  && echo "date.timezone = UTC" >> /etc/php8/php.ini \
-  && ln -s /usr/bin/php8 /bin/php
+  php83-cli \
+  php83-dom \
+  php83-xml \
+  php83-mbstring \
+  php83-phar \
+  php83-tokenizer \
+  php83-xmlwriter \
+  php83-openssl \
+  && echo "date.timezone = UTC" >> /etc/php83/php.ini \
+  && ln -s /usr/bin/php83 /bin/php
 
 
 
