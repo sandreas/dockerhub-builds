@@ -4,7 +4,7 @@ FROM alpine:latest
 # Set environment variables for non-interactive installation
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
-ENV XRDP_USER=username
+ENV XRDP_USER=andreas
 ENV XRDP_PASSWORD=password
 
 # Install necessary dependencies for Xfce, JDownloader, Firefox, Tor Browser, and XRDP
@@ -36,19 +36,19 @@ RUN apk update && apk upgrade && \
 RUN apk add --no-cache openjdk11
 
 # Install JDownloader
-RUN curl -fsSL https://installer.jdownloader.org/JDownloader2_setup_stable.sh | bash
+# RUN curl -fsSL https://installer.jdownloader.org/JDownloader2_setup_stable.sh | bash
 
 # Install Firefox (latest version from official repositories)
-RUN apk add --no-cache firefox
+# RUN apk add --no-cache firefox
 
 # Install Tor Browser (using Tor package from Alpine repositories)
-RUN apk add --no-cache tor
+# RUN apk add --no-cache tor
 
 # Configure the xrdp session to start Xfce
 RUN echo "xfce4-session" > /etc/skel/.xsession
 
 # Set up supervisor to handle xrdp and other services
-RUN apk add --no-cache supervisor
+RUN apk add --no-cache supervisor libc6-compat
 
 # Create a supervisor configuration file for xrdp
 RUN echo "[supervisord]" > /etc/supervisord.conf && \
@@ -58,12 +58,10 @@ RUN echo "[supervisord]" > /etc/supervisord.conf && \
     echo "[program:xrdp-sesman]" >> /etc/supervisord.conf && \
     echo "command=/usr/sbin/xrdp-sesman" >> /etc/supervisord.conf
 
-# Expose the XRDP port
-EXPOSE 3389
 
 # Create a user with password
 # Install xrdp Xorg backend
-RUN apk add --no-cache xorgxrdp
+RUN apk add --no-cache xorgxrdp libc6-compat libstdc++ libgcc
 
 # Create user
 RUN adduser -D -s /bin/bash $XRDP_USER && \
@@ -78,9 +76,17 @@ RUN echo "startxfce4" > /home/$XRDP_USER/.xsession && \
 # Runtime fix
 RUN mkdir -p /run/dbus && chmod 755 /run/dbus
 
+RUN curl -LsSf https://www.rarlab.com/rar/rarlinux-x64-720.tar.gz > /tmp/rarlinux.tar.gz && \
+    mkdir /tmp/unrar && \
+    tar xf /tmp/rarlinux.tar.gz -C /tmp/unrar --strip-components=1 && \
+    install -v -m755 /tmp/unrar/unrar /usr/local/bin
+
 # Clean up unnecessary packages to reduce size
 RUN apk del --no-cache sudo && \
     rm -rf /var/cache/apk/*
+
+# Expose the XRDP port
+EXPOSE 3389
 
 # Final command to start supervisor and run all services
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
