@@ -44,7 +44,7 @@ for ((i=0; i<length; i+=chunk_size)); do
     wait
     #echo "sudo is $3"
     if [[ "$ENABLE_SUDO" == "yes" ]]; then
-        usermod -aG sudo $1
+        usermod -aG sudo "$USERNAME"
     fi
     wait
     echo "user '$USERNAME' is added"    
